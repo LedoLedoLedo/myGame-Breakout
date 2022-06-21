@@ -1,0 +1,46 @@
+* {
+    box-sizing: border-box;
+    font-family: "Bowlby One SC", cursive;
+    font-size: 1.2rem;
+    color: #caa8f5;
+  }
+  
+  body {
+    background-color: green;
+    color: rgb(51, 64, 51);
+  }
+  
+  #canvas {
+    background: yellow;
+    border-radius: 5px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid #9984d4;
+   }
+  
+  .high-score {
+    position: absolute;
+    top: 1.5rem;
+    width: 80%;
+    left: 10%;
+    text-align: center;
+  }
+  
+  .reset {
+    cursor: pointer;
+    position: absolute;
+    top: 95%;
+    left: 10%;
+    width: 80%;
+    text-align: center;
+  } */
+      
+     #color-overlay {
+    width: 100%;
+    height: 100vh;
+    opacity: 0.8;
+    text-align: center;
+    color: #fff;
+      }
