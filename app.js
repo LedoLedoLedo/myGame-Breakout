@@ -1,22 +1,20 @@
 const scoreDisplay = document.querySelector(".high-score");
- const reset = document.querySelector(".reset");
- 
- 
- const canvas = document.getElementById("canvas");
- const ctx = canvas.getContext("2d");
+const reset = document.querySelector(".reset");
+
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
 
 canvas.width = 500;
 canvas.height = 500;
 
-let score = 0
-
+let score = 0;
 function drawScore() {
-    ctx.font = "16px Arial";
-    ctx.fillStyle = "black";
-    ctx.fillText("Score: " + score, 8, 20);
-  }
+  ctx.font = "16px Arial";
+  ctx.fillStyle = "black";
+  ctx.fillText("Score: " + score, 8, 20);
+}
 
-  let highScore = parseInt(localStorage.getItem("highScore"));
+let highScore = parseInt(localStorage.getItem("highScore"));
 
 if (isNaN(highScore)) {
   highScore = 0;
@@ -30,7 +28,6 @@ reset.addEventListener("click", () => {
   scoreDisplay.innerHTML = `High Score: 0`;
   drawBricks();
 });
-
 
 //////Making the Paddle move////
 let rightPressed = false;
@@ -71,9 +68,10 @@ function movePaddle() {
 
 /////Ball Making////
 
-let speed = 3;
-
+let speed = 4;
+ 
 let ball = {
+
   x: canvas.height / 2,
   y: canvas.height - 50,
   dx: speed,
@@ -81,11 +79,20 @@ let ball = {
   radius: 7,
   speed: 9,
   draw: function () {
+    const drawImage = () => {
+      const image = new Image();
+      image.src = url;
+      image.onload = () => {
+         ctx.drawImage(image, 0, 0)
+      }
+  }
     ctx.beginPath();
+    //ctx.fillStyle = randomColor();
     ctx.fillStyle = "black";
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
     ctx.closePath();
     ctx.fill();
+   
   },
 };
 
@@ -98,7 +105,8 @@ let paddle = {
   draw: function () {
     ctx.beginPath();
     ctx.rect(this.x, canvas.height - this.height, this.width, this.height);
-    ctx.fillStyle = "black";
+    //ctx.fillStyle = randomColor();
+     ctx.fillStyle = "black";
     ctx.closePath();
     ctx.fill();
   },
@@ -107,49 +115,49 @@ let paddle = {
 ////PLAY FUNCTION///
 
 function play() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawBricks();
-    ball.draw();
-    paddle.draw();
-    movePaddle();
-    collisionDetection();
-    levelUp();
-    drawScore();
-  
-    ball.x += ball.dx;
-    ball.y += ball.dy;
-  
-    if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
-      ball.dx *= -1;
-    }
-  
-    if (ball.y + ball.radius > canvas.height || ball.y - ball.radius < 0) {
-      ball.dy *= -1;
-    }
-  
-    // reset score
-    if (ball.y + ball.radius > canvas.height) {
-      if (score > parseInt(localStorage.getItem("highScore"))) {
-        localStorage.setItem("highScore", score.toString());
-        scoreDisplay.innerHTML = `High Score: ${score}`;
-      }
-      score = 0;
-      generateBricks();
-      ball.dx = speed;
-      ball.dy = -speed + 1;
-    }
-  
-    // Bounce off paddle
-    if (
-      ball.x >= paddle.x &&
-      ball.x <= paddle.x + paddle.width &&
-      ball.y + ball.radius >= canvas.height - paddle.height
-    ) {
-      ball.dy *= -1;
-    }
-  
-    requestAnimationFrame(play);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawBricks();
+  ball.draw();
+  paddle.draw();
+  movePaddle();
+  collisionDetection();
+  levelUp();
+  drawScore();
+
+  ball.x += ball.dx;
+  ball.y += ball.dy;
+
+  if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
+    ball.dx *= -1;
   }
+
+  if (ball.y + ball.radius > canvas.height || ball.y - ball.radius < 0) {
+    ball.dy *= -1;
+  }
+
+  // reset score
+  if (ball.y + ball.radius > canvas.height) {
+    if (score > parseInt(localStorage.getItem("highScore"))) {
+      localStorage.setItem("highScore", score.toString());
+      scoreDisplay.innerHTML = `High Score: ${score}`;
+    }
+    score = 0;
+    generateBricks();
+    ball.dx = speed;
+    ball.dy = -speed + 1;
+  }
+
+  // Bounce off paddle
+  if (
+    ball.x >= paddle.x &&
+    ball.x <= paddle.x + paddle.width &&
+    ball.y + ball.radius >= canvas.height - paddle.height
+  ) {
+    ball.dy *= -1;
+  }
+
+  requestAnimationFrame(play);
+}
 
 //////Making Bricks/////
 let brickRowCount = 3;
@@ -180,9 +188,9 @@ function drawBricks() {
         bricks[c][r].x = brickX;
         bricks[c][r].y = brickY;
         ctx.beginPath();
-        ctx.rect(brickX, brickY, brickWidth, brickHeight);
-        ctx.fillStyle = "#230c33";
-        ctx.fill();
+        ctx.fillStyle = randomColor();
+        ctx.fillRect(brickX, brickY, brickWidth, brickHeight);
+        //ctx.fillStyle = ctx.fill();
         ctx.closePath();
       }
     }
@@ -236,24 +244,22 @@ function levelUp() {
 generateBricks();
 play();
 
-
-setInterval(
-  function random_bg_color() {
-    var x = Math.floor(Math.random() * 256);
-    var y = Math.floor(Math.random() * 256);
-    var z = Math.floor(Math.random() * 256);
-    var bgColor = "rgb(" + x + "," + y + "," + z + ")";
+function randomColor() {
+  var x = Math.floor(Math.random() * 256);
+  var y = Math.floor(Math.random() * 256);
+  var z = Math.floor(Math.random() * 256);
+  var bgColor = "rgb(" + x + "," + y + "," + z + ")";
   console.log(bgColor);
-    document.body.style.background = bgColor;
-    },2000)
-  
-  random_bg_color();
+  return bgColor;
+}
 
+function setBg() {
+  document.body.style.background = randomColor();
+}
 
+setInterval(setBg, 1000);
 
-
-
-
+random_bg_color();
 
 /////////////////////////////////
 
@@ -484,14 +490,3 @@ setInterval(
 
 // generateBricks();
 // play();
-
-
-
-
-
-
-
-
-
-
-
